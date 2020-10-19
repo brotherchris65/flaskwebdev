@@ -14,29 +14,32 @@ class NameForm(FlaskForm):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "10012019willliveininfamy"
-app.config['SQLAlchemy_DATABASE_URI'] =\
+app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db= SQLAlchemy(app)
+db = SQLAlchemy(app)
 
-"""Set up the Database here"""
+
 class Role(db.Model):
-    __tablename__='roles'
-    id=db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    users=db.relationship('User', backref='role')
+    users = db.relationship('User', backref='role')
 
     def __repr__(self):
-        return'<Role %r>' % self.name
+        return '<Role %r>' % self.name
+
+
 class User(db.Model):
-    __tablename__='users'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     def __repr__(self):
-        return'<User %r>' % self.username
+        return '<User %r>' % self.username
+
 
 
 bootstrap = Bootstrap(app)
